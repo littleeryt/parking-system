@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ system_name }}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">P</span>
+    <div>
+      <h1>{{ system_name }}</h1>
+      <p class="tagline">Live bay monitoring &amp; automated exit billing</p>
+    </div>
+  </div>
+  <div class="topbar-stats">
+    <div class="stat">
+      <span class="stat-value" id="clock">--:--:--</span>
+      <span class="stat-label">Local time</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value"><span id="occupied-count">0</span>/{{ total_slots }}</span>
+      <span class="stat-label">Bays occupied</span>
+    </div>
+  </div>
+</header>
+
+<main class="layout">
+
+  <section class="lot-panel">
+    <h2>Bay availability</h2>
+    <div id="slot-grid" class="slot-grid"></div>
+    <div class="legend">
+      <span><i class="swatch free"></i> Free</span>
+      <span><i class="swatch occupied"></i> Occupied</span>
+    </div>
+  </section>
+
+  <aside class="side-panel">
+
+    <div class="card">
+      <h2>Vehicle arrival</h2>
+      <form id="entry-form">
+        <label for="entry-plate">Number plate</label>
+        <input id="entry-plate" type="text" placeholder="KDA 123B" autocomplete="off" required>
+        <button type="submit">Register arrival</button>
+      </form>
+      <p class="message" id="entry-message"></p>
+    </div>
+
+    <div class="card">
+      <h2>Exit &amp; payment</h2>
+      <form id="checkout-form">
+        <label for="exit-plate">Number plate</label>
+        <input id="exit-plate" type="text" placeholder="KDA 123B" autocomplete="off" required>
+        <button type="submit">Calculate fee</button>
+      </form>
+
+      <div id="fee-result" class="fee-result hidden">
+        <div class="fee-row"><span>Bay</span><span id="fee-slot">--</span></div>
+        <div class="fee-row"><span>Time parked</span><span id="fee-minutes">--</span></div>
+        <div class="fee-row total"><span>Amount due</span><span id="fee-amount">Kshs 0</span></div>
+        <button type="button" id="pay-button">Confirm payment &amp; open barrier</button>
+      </div>
+
+      <p class="message" id="exit-message"></p>
+
+      <div id="barrier" class="barrier">
+        <div class="barrier-post"></div>
+        <div class="barrier-arm" id="barrier-arm"></div>
+        <div class="barrier-post"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Waiting queue</h2>
+      <ol id="queue-list" class="queue-list">
+        <li class="empty">No vehicles waiting</li>
+      </ol>
+    </div>
+
+  </aside>
+
+</main>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
